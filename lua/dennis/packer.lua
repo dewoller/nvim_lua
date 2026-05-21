@@ -156,7 +156,6 @@ require("claude-code").setup({
 			-- {'saadparwaiz1/cmp_luasnip'},
 			{'hrsh7th/cmp-nvim-lsp', after = "nvim-cmp" },
 			{'hrsh7th/cmp-nvim-lua', after = "nvim-cmp" },
-			{ "jalvesaq/cmp-nvim-r" , after = "nvim-cmp" },
 
 			{'hrsh7th/cmp-cmdline'},
 			-- Snippets
@@ -207,7 +206,6 @@ require("claude-code").setup({
 		end
 	}
 
-	use{"jalvesaq/Nvim-R"}
 
 
 	use {
