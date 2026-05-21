@@ -67,7 +67,7 @@ return require('packer').startup(function(use)
 
 	use{
 		"NeogitOrg/neogit",
-		branch = "nightly",
+		branch = "master",
 		config=function()
 			require('neogit').setup({
 				disable_commit_confirmation = true,
