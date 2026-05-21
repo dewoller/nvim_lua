@@ -140,24 +140,11 @@ M.telescope={
 		["<leader>th"] = {"<cmd>Telescope quickfixhistory<cr>","quickfixhistory"},
 		["<leader>tl"] = {"<cmd>Telescope loclist<cr>","loclist"},
 		["<leader>ts"] = {"<cmd>Telescope search_history<cr>","search_history"},
-		["<c-p>"] = {"<cmd>Telescope luasnip<cr>","luasnip"},
 		["<leader>tr"] = {"<cmd>Telescope resume<cr>","telescope resume"},
 		["<leader>to"] = {"<cmd>Telescope vim_options<cr>","vim_options"},
 		["<leader>tm"] = {"<cmd>Telescope marks<cr>","marks"},
 		["<leader>tk"] = {"<cmd>Telescope keymaps<cr>","keymaps"},
 		["<leader>ta"] = {"<cmd>Telescope autocommands<cr>","autocommands"},
-	},
-	i={
-		["<c-p>"] = {
-			function()
-				print( vim.fn.expand("<cword>"))
-				require('functions').send_keystrokes( vim.fn.expand("<cword>"))
-				vim.api.nvim_command( "Telescope luasnip<cr>")
-			end
-		},
-	},
-	v={
-		["<c-p>"] = {"<cmd>Telescope luasnip<cr>","luasnip"},
 	},
 }
 

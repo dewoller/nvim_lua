@@ -106,21 +106,7 @@ return require('packer').startup(function(use)
 			{'hrsh7th/cmp-nvim-lua', after = "nvim-cmp" },
 
 			{'hrsh7th/cmp-cmdline'},
-			-- Snippets
-			{'L3MON4D3/LuaSnip'},
-			-- {'rafamadriz/friendly-snippets'},
 		}
-	}
-
-	use {
-		"benfowler/telescope-luasnip.nvim",
-		module = "telescope._extensions.luasnip",  -- if you wish to lazy-load
-	}
-
-	use {
-		'L3MON4D3/LuaSnip',
-		after = 'nvim-cmp',
-		-- config = function() require('config.snippets') end,
 	}
 
 	use({
