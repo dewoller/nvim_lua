@@ -34,8 +34,6 @@ return require('packer').startup(function(use)
 		run =  'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cmake --build build --config Release'
 	}
 
-	use{ 'ms-jpq/lua-async-await' }
-
 
 	use {
 		'nvim-treesitter/nvim-treesitter',
@@ -100,14 +98,6 @@ return require('packer').startup(function(use)
 		}
 	}
 
-	-- git stuff
-	use{
-		"lewis6991/gitsigns.nvim",
-		config = function()
-			require("gitsigns").setup()
-		end
-	}
-
 	use {
 		'numToStr/Comment.nvim',
 		config = function()
@@ -143,15 +133,6 @@ return require('packer').startup(function(use)
 	use{"svermeulen/vim-yoink"}
 	use{"svermeulen/vim-subversive"}
 	-- use{"tpope/vim-fugitive"}
-	use{"max397574/better-escape.nvim"}
-
-
-	use {
-		"windwp/nvim-autopairs",
-		config = function() require("nvim-autopairs").setup {} end
-	}
-
-
 
 	-- colors
 	use {'folke/tokyonight.nvim'}
