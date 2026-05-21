@@ -35,21 +35,28 @@ return {
     lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
-      require("nvim-treesitter-textobjects").setup({
-        select = {
-          lookahead = true,
-          include_surrounding_whitespace = false,
-        },
-      })
+      -- The version installed against nvim-treesitter v1 ships either a
+      -- top-level setup() OR a per-submodule API depending on the upstream
+      -- branch. Probe both, wire keymaps only if select API exists.
+      pcall(function()
+        require("nvim-treesitter-textobjects").setup({
+          select = {
+            lookahead = true,
+            include_surrounding_whitespace = false,
+          },
+        })
+      end)
 
-      local map = vim.keymap.set
-      local sel = require("nvim-treesitter-textobjects.select")
-      map({ "x", "o" }, "af", function() sel.select_textobject("@function.outer", "textobjects") end, { desc = "outer function" })
-      map({ "x", "o" }, "if", function() sel.select_textobject("@function.inner", "textobjects") end, { desc = "inner function" })
-      map({ "x", "o" }, "ac", function() sel.select_textobject("@class.outer", "textobjects") end, { desc = "outer class" })
-      map({ "x", "o" }, "ic", function() sel.select_textobject("@class.inner", "textobjects") end, { desc = "inner class" })
-      map({ "x", "o" }, "ar", function() sel.select_textobject("@parameter.outer", "textobjects") end, { desc = "outer parameter" })
-      map({ "x", "o" }, "ir", function() sel.select_textobject("@parameter.inner", "textobjects") end, { desc = "inner parameter" })
+      local sel_ok, sel = pcall(require, "nvim-treesitter-textobjects.select")
+      if sel_ok and sel.select_textobject then
+        local map = vim.keymap.set
+        map({ "x", "o" }, "af", function() sel.select_textobject("@function.outer", "textobjects") end, { desc = "outer function" })
+        map({ "x", "o" }, "if", function() sel.select_textobject("@function.inner", "textobjects") end, { desc = "inner function" })
+        map({ "x", "o" }, "ac", function() sel.select_textobject("@class.outer", "textobjects") end, { desc = "outer class" })
+        map({ "x", "o" }, "ic", function() sel.select_textobject("@class.inner", "textobjects") end, { desc = "inner class" })
+        map({ "x", "o" }, "ar", function() sel.select_textobject("@parameter.outer", "textobjects") end, { desc = "outer parameter" })
+        map({ "x", "o" }, "ir", function() sel.select_textobject("@parameter.inner", "textobjects") end, { desc = "inner parameter" })
+      end
     end,
   },
 
