@@ -1,12 +1,4 @@
-
-require('dennis/packer')
-require('settings')
-require('dennis/mappings')
-require('dennis/functions')
-
-
-
-
-
-
-
+-- init.lua: bootstrap and load the modular config.
+require("config.lazy")
+require("config.keymaps")
+require("config.autocmds")
