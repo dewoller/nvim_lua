@@ -22,10 +22,10 @@ return {
       vim.g.yoinkIncludeDeleteOperations = 1
     end,
     keys = {
-      { "p",     "yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'", expr = true, mode = "n" },
-      { "P",     "yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'", expr = true, mode = "n" },
-      { "<c-p>", "<plug>(YoinkPostPasteSwapForward)", mode = "n" },
-      { "y",     "<plug>(YoinkYankPreserveCursorPosition)", mode = { "n", "x" } },
+      { "p",     "yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'",    expr = true, remap = true, mode = "n" },
+      { "P",     "yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'", expr = true, remap = true, mode = "n" },
+      { "<c-p>", "<plug>(YoinkPostPasteSwapForward)",          remap = true, mode = "n" },
+      { "y",     "<plug>(YoinkYankPreserveCursorPosition)",    remap = true, mode = { "n", "x" } },
     },
   },
 
@@ -34,14 +34,14 @@ return {
     "svermeulen/vim-subversive",
     event = "VeryLazy",
     keys = {
-      { "s",   "<plug>(SubversiveSubstitute)", mode = "n" },
-      { "ss",  "<plug>(SubversiveSubstituteLine)", mode = "n" },
-      { "S",   "<plug>(SubversiveSubstituteToEndOfLine)", mode = "n" },
-      { "gs",  "<plug>(SubversiveSubstituteRange)", mode = { "n", "x" } },
-      { "gss", "<plug>(SubversiveSubstituteWordRange)", mode = "n" },
-      { "s",   "<plug>(SubversiveSubstitute)", mode = "x" },
-      { "p",   "<plug>(SubversiveSubstitute)", mode = "x" },
-      { "P",   "<plug>(SubversiveSubstitute)", mode = "x" },
+      { "s",   "<plug>(SubversiveSubstitute)",            remap = true, mode = "n" },
+      { "ss",  "<plug>(SubversiveSubstituteLine)",        remap = true, mode = "n" },
+      { "S",   "<plug>(SubversiveSubstituteToEndOfLine)", remap = true, mode = "n" },
+      { "gs",  "<plug>(SubversiveSubstituteRange)",       remap = true, mode = { "n", "x" } },
+      { "gss", "<plug>(SubversiveSubstituteWordRange)",   remap = true, mode = "n" },
+      { "s",   "<plug>(SubversiveSubstitute)",            remap = true, mode = "x" },
+      { "p",   "<plug>(SubversiveSubstitute)",            remap = true, mode = "x" },
+      { "P",   "<plug>(SubversiveSubstitute)",            remap = true, mode = "x" },
     },
   },
 
