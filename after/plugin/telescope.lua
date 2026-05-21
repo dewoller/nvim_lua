@@ -7,9 +7,6 @@ end
 
 
 
-local lst = require('telescope').extensions.luasnip
-local luasnip = require('luasnip')
-
 local options = {
 	defaults = {
 		vimgrep_arguments = {
@@ -72,21 +69,8 @@ local options = {
 				sort_lastused = true,
 			},
 		},
-		extensions_list = {  'workspaces', 'fzf', 'luasnip' },
-		extensions = {
-			luasnip={
-				search = function(entry)
-					return lst.filter_null(entry.context.trigger) .. " " ..
-						lst.filter_null(entry.context.name) .. " " ..
-						entry.ft .. " " ..
-						lst.filter_description(entry.context.name, entry.context.description) ..
-						lst.get_docstring(luasnip, entry.ft, entry.context)[1]
-				end
-			}
-		}
+		extensions_list = { 'fzf' },
 	}
-
-telescope.load_extension('luasnip')
 
 -- check for any override
 telescope.setup(options)

@@ -30,21 +30,14 @@ lsp.setup()
 
 
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
 cmp.setup({
 	sources = {
 		{name = 'nvim_lsp'},
 		{name = 'path'},
 		{name = 'buffer', keyword_length = 3},
-		{name = 'luasnip', keyword_length = 2},
 	},
 	mapping = cmp.mapping.preset.insert({
-		['<C-f>'] = cmp_action.luasnip_jump_forward(),
-		['<C-b>'] = cmp_action.luasnip_jump_backward(),
-		['<Tab>'] = cmp_action.luasnip_supertab(),
-		['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
 		['<C-Space>'] = cmp.mapping.complete(),
 		['<CR>'] = cmp.mapping.confirm({ select = true }),
 		['<C-e>'] = cmp.mapping.abort(),
@@ -59,14 +52,6 @@ cmp.setup({
 		ghost_text = false
 	},
 })
-
--- Setup autopairs integration
-cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
-
--- R language completion source (if it exists)
-pcall(function()
-	table.insert(cmp.get_config().sources, 1, { name = 'cmp_nvim_r' })
-end)
 
 -- `/` cmdline setup.
 cmp.setup.cmdline('/', {
