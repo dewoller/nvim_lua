@@ -1,8 +1,8 @@
 return {
-  -- tpope trio
-  { "tpope/vim-surround", event = "VeryLazy" },
-  { "tpope/vim-repeat",   event = "VeryLazy" },
-  { "tpope/vim-unimpaired", event = "VeryLazy" },
+  -- tpope trio — load at startup; vimscript plugins that register VimEnter autocmds
+  { "tpope/vim-surround",   lazy = false },
+  { "tpope/vim-repeat",     lazy = false },
+  { "tpope/vim-unimpaired", lazy = false },
 
   -- Cutlass — separate delete from cut
   {
@@ -13,26 +13,30 @@ return {
     },
   },
 
-  -- Yoink — yank ring
+  -- Yoink — yank ring. Must load at startup: plugin/yoink.vim registers a
+  -- VimEnter autocmd (yoink#onVimEnter) that initialises the paste machinery.
+  -- Lazy-loading it post-VimEnter leaves yoink#paste/opfunc state uninitialised
+  -- and `p` becomes a silent no-op.
   {
     "svermeulen/vim-yoink",
-    event = "VeryLazy",
+    lazy = false,
     init = function()
       vim.g.yoinkSavePersistently = 1
       vim.g.yoinkIncludeDeleteOperations = 1
     end,
     keys = {
-      { "p",     "yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'",    expr = true, remap = true, mode = "n" },
-      { "P",     "yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'", expr = true, remap = true, mode = "n" },
+      { "p",     "<plug>(YoinkPaste_p)",                       remap = true, mode = "n" },
+      { "P",     "<plug>(YoinkPaste_P)",                       remap = true, mode = "n" },
       { "<c-p>", "<plug>(YoinkPostPasteSwapForward)",          remap = true, mode = "n" },
+      { "<c-n>", "<plug>(YoinkPostPasteSwapBack)",             remap = true, mode = "n" },
       { "y",     "<plug>(YoinkYankPreserveCursorPosition)",    remap = true, mode = { "n", "x" } },
     },
   },
 
-  -- Subversive — substitute with register
+  -- Subversive — substitute with register. Also vimscript, also safest at startup.
   {
     "svermeulen/vim-subversive",
-    event = "VeryLazy",
+    lazy = false,
     keys = {
       { "s",   "<plug>(SubversiveSubstitute)",            remap = true, mode = "n" },
       { "ss",  "<plug>(SubversiveSubstituteLine)",        remap = true, mode = "n" },
