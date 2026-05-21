@@ -132,13 +132,6 @@ return require('packer').startup(function(use)
 		keys = { "]i", "[i", { "v", "ii" }, { "o", "ii" } },
 	})
 
-		use {
-			'feline-nvim/feline.nvim',
-			requires = {
-				'nvim-tree/nvim-web-devicons',
-			},
-		}
-
 	-- git stuff
 	use{
 		"lewis6991/gitsigns.nvim",
