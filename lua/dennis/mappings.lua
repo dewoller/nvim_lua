@@ -14,16 +14,6 @@ M.hop = {
 	}
 }
 
-M.workspaces = {
-	n={
-		["<Leader>tw"] = {":Telescope workspaces<cr>" },
-		["<Leader>wa"] = { function() require('workspaces').add() end
-		},
-	}
-}
-
-
-
 
 M.surround = {
 	n={
@@ -33,20 +23,6 @@ M.surround = {
 	}
 }
 
-M.sideways = {
-	n={
-		["[p"] = {":SidewaysRight<cr>"},
-		["]p"] = {":SidewaysLeft<cr>"},
-	},
-	o={
-		["aa"] = {'<Plug>SidewaysArgumentTextobjA'},
-		["ia"] = {'<Plug>SidewaysArgumentTextobjI'},
-	},
-	x={
-		["aa"] = {'<Plug>SidewaysArgumentTextobjA'},
-		["ia"] = {'<Plug>SidewaysArgumentTextobjI'},
-	},
-}
 
 M.buffer = {
 	n={

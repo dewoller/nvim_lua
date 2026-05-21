@@ -100,15 +100,6 @@ return require('packer').startup(function(use)
 		}
 	}
 
-	use({
-		"arsham/indent-tools.nvim",
-		requires = { "arsham/arshlib.nvim" },
-		config = function()
-			require("indent-tools").config({})
-		end,
-		keys = { "]i", "[i", { "v", "ii" }, { "o", "ii" } },
-	})
-
 	-- git stuff
 	use{
 		"lewis6991/gitsigns.nvim",
@@ -134,12 +125,6 @@ return require('packer').startup(function(use)
 		end
 	}
 
-	use {
-		'stevearc/oil.nvim',
-		config = function() require('oil').setup() end
-	}
-
-	use{"natecraddock/workspaces.nvim"}
 	use({
 		"gbprod/cutlass.nvim",
 		config = function()
@@ -155,7 +140,6 @@ return require('packer').startup(function(use)
 	use{"tpope/vim-surround"}
 	use{"tpope/vim-repeat"}
 	use{"tpope/vim-unimpaired"}
-	use{"AndrewRadev/sideways.vim"}
 	use{"svermeulen/vim-yoink"}
 	use{"svermeulen/vim-subversive"}
 	-- use{"tpope/vim-fugitive"}
