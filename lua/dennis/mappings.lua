@@ -116,21 +116,6 @@ M.yoink={
 }
 
 
-M.claudecode={
-	n={
-		['<leader>cc'] = {'<cmd>ClaudeCode<CR>'},
-		['<leader>co'] = {'<cmd>ClaudeCodeContinue<CR>'},
-		['<leader>cr'] = {'<cmd>ClaudeCodeResume<CR>'},
-	},
-	t={
-		-- Terminal paste mappings
-		["<C-v>"] = {"<C-\\><C-N>\"+pi", "Paste from system clipboard"},
-		["<C-S-v>"] = {"<C-\\><C-N>\"+pi", "Paste from system clipboard (alternate)"},
-		-- Exit terminal mode
-		["<C-Esc>"] = {"<C-\\><C-N>", "Exit to terminal-normal mode"},
-	}
-}
-
 
 M.telescope={
 	n={
@@ -205,9 +190,6 @@ M.general_programming = {
 	}
 }
 
-vim.g.copilot_no_tab_map = true
-
-vim.api.nvim_set_keymap("i", "<C-L>", 'copilot#Accept("<CR>")', { silent = true, expr = true, noremap = true })
 
 M.general = {
 	i={
