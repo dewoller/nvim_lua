@@ -1,0 +1,32 @@
+extends r
+extends markdown
+
+snippet header "heading" b
+	---
+	title:           $1
+	author:          Dennis Wollersheim 
+	date:             "\`r stringr::str_remove_all(format(lubridate::now(tzone='Australia/Melbourne'), 'Last run at %B %d, %I:%M %P'), '(?<= )0')\`"
+	linkcolor:       cyan
+	citecolor:       grey
+	output:
+		pdf_document:
+			highlight:   zenburn
+	---
+
+	\`\`\`{r load, include=FALSE}
+
+	knitr::opts_chunk$set(echo = FALSE)
+	\`\`\`
+
+
+	\`\`\`{r load, include=FALSE}
+	source('packages.R')
+	lapply(list.files("./R", pattern='*.R', full.names = TRUE), source)
+	rsconnect_board= pins::board_register_rsconnect()
+
+	$2
+	\`\`\`
+
+
+
+snippet 

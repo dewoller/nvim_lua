@@ -1,0 +1,42 @@
+
+
+snippet ass "assign"
+	%>% 
+	{ . } -> ${1}
+
+
+snippet b "browser"
+	browser()
+
+
+snippet xc "copy to clipboard"
+	%>% clipr::write_clip()
+
+snippet ad "across Date"
+	mutate( across( ends_with('Date'), as.Date )) %>%
+
+snippet #'p "Roxygen package template" b
+	#' `!p snip.rv = snip.basename`: $1
+	#'
+	#' $2
+	#'
+	#' @docType package
+	#' @name `!p snip.rv = snip.basename`
+
+
+snippet #' "Roxygen function template" b
+	#' $1
+	#'
+	#' @param $2
+	#'
+	#' @return $3
+	#'
+	#' @examples
+	#' $4
+	#'
+	#' @export
+
+
+snippet ### "comment line"
+	################################################################################
+
