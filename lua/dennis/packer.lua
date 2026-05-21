@@ -36,15 +36,6 @@ return require('packer').startup(function(use)
 
 	use{ 'ms-jpq/lua-async-await' }
 
-	use{'kana/vim-textobj-user'}
-	use{'coachshea/vim-textobj-markdown'}
-	use{'kana/vim-textobj-entire'}
-	use{'glts/vim-textobj-comment'}
-	use{ 'michaeljsmith/vim-indent-object'}
-	use{'beloglazov/vim-textobj-quotes'}
-
-	use{'Julian/vim-textobj-variable-segment'}
-
 
 	use {
 		'nvim-treesitter/nvim-treesitter',
