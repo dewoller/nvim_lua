@@ -52,8 +52,7 @@ return {
         local map = vim.keymap.set
         map({ "x", "o" }, "af", function() sel.select_textobject("@function.outer", "textobjects") end, { desc = "outer function" })
         map({ "x", "o" }, "if", function() sel.select_textobject("@function.inner", "textobjects") end, { desc = "inner function" })
-        map({ "x", "o" }, "ac", function() sel.select_textobject("@class.outer", "textobjects") end, { desc = "outer class" })
-        map({ "x", "o" }, "ic", function() sel.select_textobject("@class.inner", "textobjects") end, { desc = "inner class" })
+        -- ac/ic intentionally left for vim-textobj-comment (legacy textobj)
         map({ "x", "o" }, "ar", function() sel.select_textobject("@parameter.outer", "textobjects") end, { desc = "outer parameter" })
         map({ "x", "o" }, "ir", function() sel.select_textobject("@parameter.inner", "textobjects") end, { desc = "inner parameter" })
       end

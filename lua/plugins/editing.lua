@@ -49,8 +49,41 @@ return {
     },
   },
 
-  -- vim-textobj-user is gone (none of the legacy textobj-* plugins kept)
   -- operator-surround keymaps from M.surround used <Plug>(operator-surround-*)
   -- but the actual plugin "osyo-manga/vim-operator-surround" was never installed.
   -- Those keymaps were dead in the old config; do not migrate them.
+
+  -- Legacy text-object plugins. vim-textobj-user is the shared framework the
+  -- others register against; it must load before its consumers, hence lazy=false.
+  -- Restores `vae`/`yae` (entire), `aq`/`iq` (quotes), `av`/`iv` (variable
+  -- segment), `ai`/`ii` (indent), markdown sections, and comment textobj.
+  { "kana/vim-textobj-user",              lazy = false },
+  { "kana/vim-textobj-entire",            lazy = false, dependencies = { "kana/vim-textobj-user" } },
+  { "coachshea/vim-textobj-markdown",     lazy = false, dependencies = { "kana/vim-textobj-user" } },
+  { "glts/vim-textobj-comment",           lazy = false, dependencies = { "kana/vim-textobj-user" } },
+  { "beloglazov/vim-textobj-quotes",      lazy = false, dependencies = { "kana/vim-textobj-user" } },
+  { "Julian/vim-textobj-variable-segment", lazy = false, dependencies = { "kana/vim-textobj-user" } },
+  { "michaeljsmith/vim-indent-object",    lazy = false },
+
+  -- Sideways — argument swap + `aa`/`ia` argument textobj
+  {
+    "AndrewRadev/sideways.vim",
+    lazy = false,
+    keys = {
+      { "[p", ":SidewaysRight<cr>", mode = "n", silent = true },
+      { "]p", ":SidewaysLeft<cr>",  mode = "n", silent = true },
+      { "aa", "<Plug>SidewaysArgumentTextobjA", mode = { "o", "x" }, remap = true },
+      { "ia", "<Plug>SidewaysArgumentTextobjI", mode = { "o", "x" }, remap = true },
+    },
+  },
+
+  -- indent-tools — `]i`/`[i` motion, `ii` textobj in v/o
+  {
+    "arsham/indent-tools.nvim",
+    dependencies = { "arsham/arshlib.nvim" },
+    keys = { "]i", "[i", { "ii", mode = { "v", "o" } } },
+    config = function()
+      require("indent-tools").config({})
+    end,
+  },
 }
