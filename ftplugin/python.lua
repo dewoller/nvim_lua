@@ -1,9 +1,9 @@
 -- --
 --     -- called MotionSend but works with textobjects as well
-    vim.keymap.set("v", "<LocalLeader>ss", "<Plug>SlimeRegionSend", { remap = true, silent = false })
-    vim.keymap.set("n", "gz", "<Plug>SlimeMotionSend", { remap = true, silent = false })
---     vim.keymap.set("n", "gzz", "<Plug>SlimeLineSend", { remap = true, silent = false })
-    vim.keymap.set("n", "gzc", "<Plug>SlimeConfig", { remap = true, silent = false })
+    vim.keymap.set("v", "<LocalLeader>ss", "<Plug>SlimeRegionSend", { remap = true, silent = false, buffer = true })
+    vim.keymap.set("n", "gz", "<Plug>SlimeMotionSend", { remap = true, silent = false, buffer = true })
+--     vim.keymap.set("n", "gzz", "<Plug>SlimeLineSend", { remap = true, silent = false, buffer = true })
+    vim.keymap.set("n", "gzc", "<Plug>SlimeConfig", { remap = true, silent = false, buffer = true })
 
 
 -- Define additional Lua functions as needed
@@ -118,13 +118,13 @@ local M = {
 }
 
 
-setupKeyBindings = function(bindings)
+local setupKeyBindings = function(bindings)
   for section, section_values in pairs(bindings) do
     for mode, mode_values in pairs(section_values) do
       for keybind, mapping_info in pairs(mode_values) do
-        local opts = {}
+        local opts = { silent = false, buffer = true }
         opts.desc = mapping_info[2]
-        vim.keymap.set(mode, keybind, mapping_info[1], {silent=FALSE})
+        vim.keymap.set(mode, keybind, mapping_info[1], opts)
       end
     end
   end
