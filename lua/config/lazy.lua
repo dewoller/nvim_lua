@@ -16,4 +16,6 @@ require("config.options")
 require("lazy").setup({
   spec = { { import = "plugins" } },
   change_detection = { notify = false },
+  -- No plugin here needs luarocks; skip the hererocks setup and its health error.
+  rocks = { enabled = false },
 })

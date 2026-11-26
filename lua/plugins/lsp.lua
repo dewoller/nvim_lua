@@ -11,12 +11,32 @@ return {
     config = function()
       local lsp = require("lsp-zero")
 
-      lsp.on_attach(function(_, bufnr)
-        lsp.default_keymaps({
-          buffer = bufnr,
-          omit = { "gs", "K" }, -- mapped in lua/config/keymaps.lua / lspzero block
-        })
-      end)
+      -- Keymaps go on LspAttach, buffer-local. lsp-zero's on_attach() only
+      -- fires for servers set up through lspconfig's legacy setup(); with
+      -- mason-lspconfig v2 servers start via vim.lsp.enable(), so it never ran.
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
+        callback = function(event)
+          local bufnr = event.buf
+          lsp.default_keymaps({
+            buffer = bufnr,
+            omit = { "gs", "K" }, -- gs is vim-subversive; K is mapped below
+          })
+
+          -- LSP keymaps that the old config kept in M.lspzero
+          local map = function(lhs, rhs)
+            vim.keymap.set("n", lhs, rhs, { buffer = bufnr })
+          end
+          map("<leader>r", vim.lsp.buf.rename)
+          map("K",  vim.lsp.buf.hover)
+          map("gi", vim.lsp.buf.implementation)
+          map("gt", vim.lsp.buf.type_definition)
+          map("gr", vim.lsp.buf.references)
+          map("gl", vim.diagnostic.open_float)
+          map("[d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
+          map("]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
+        end,
+      })
 
       require("mason").setup({
         ui = {
@@ -28,66 +48,31 @@ return {
         },
       })
 
-      local mason_lspconfig = require("mason-lspconfig")
-      local lspconfigs = require("lspconfig.configs")
+      -- Per-server settings. mason-lspconfig v2 enables installed servers with
+      -- vim.lsp.enable(), which reads these.
+      vim.lsp.config("lua_ls", {
+        settings = {
+          Lua = {
+            diagnostics = { globals = { "vim" } },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = { enable = false },
+          },
+        },
+      })
 
-      mason_lspconfig.setup({
+      require("mason-lspconfig").setup({
         ensure_installed = {
           "lua_ls", "pyright", "ts_ls", "bashls", "jsonls", "yamlls", "marksman",
         },
-        automatic_installation = true,
+        automatic_enable = {
+          -- R workflow was dropped in the May 2026 prune, and the server
+          -- segfaults (signal 11) on open.
+          exclude = { "r_language_server" },
+        },
       })
-
-      lsp.setup()
-
-      local function setup_server(name, opts)
-        pcall(require, "lspconfig.configs." .. name)
-        local cfg = lspconfigs[name]
-        if cfg and cfg.setup then cfg.setup(opts or {}) end
-      end
-
-      local function setup_all()
-        for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
-          local config_name = server == "tsserver" and "ts_ls" or server
-          if config_name == "lua_ls" then
-            setup_server("lua_ls", {
-              settings = {
-                Lua = {
-                  diagnostics = { globals = { "vim" } },
-                  workspace = {
-                    library = vim.api.nvim_get_runtime_file("", true),
-                    checkThirdParty = false,
-                  },
-                  telemetry = { enable = false },
-                },
-              },
-            })
-          else
-            setup_server(config_name, {})
-          end
-        end
-      end
-
-      setup_all()
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "MasonToolsUpdateCompleted",
-        callback = setup_all,
-      })
-
-      -- LSP keymaps that the old config kept in M.lspzero
-      local fmt = function(cmd) return function(str) return cmd:format(str) end end
-      local lspf = fmt("<cmd>lua vim.lsp.%s<cr>")
-      local diag = fmt("<cmd>lua vim.diagnostic.%s<cr>")
-      local map = vim.keymap.set
-      map("n", "<leader>r", lspf("buf.rename()<cr>"))
-      map("n", "K",   lspf("buf.hover()"))
-      map("n", "gi",  lspf("buf.implementation()"))
-      map("n", "gt",  lspf("buf.type_definition()"))
-      map("n", "gr",  lspf("buf.references()"))
-      map("n", "gl",  diag("open_float()"))
-      map("n", "[d",  diag("goto_prev()"))
-      map("n", "]d",  diag("goto_next()"))
     end,
   },
 }

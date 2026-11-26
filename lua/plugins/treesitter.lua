@@ -1,16 +1,27 @@
+-- Parsers to install, and the filetypes that should use them.
+local ts_parsers = {
+  "lua", "vim", "vimdoc", "javascript", "typescript", "tsx", "python",
+  "r", "markdown", "c", "html", "css", "json", "yaml", "bash",
+}
+local ts_filetypes = {
+  "lua", "vim", "vimdoc", "javascript", "javascriptreact", "typescript",
+  "typescriptreact", "python", "r", "markdown", "c", "html", "css", "json",
+  "yaml", "sh", "bash",
+}
+
 return {
   -- nvim-treesitter v1 (major rewrite, requires nvim >= 0.12)
   -- Does NOT support lazy-loading per upstream README.
   -- Parsers are installed via :TSInstall / build hook, not on every startup.
+  -- v1 lives on the `main` branch; `master` is the archived pre-v1 API.
+  -- v1 parser builds need the tree-sitter CLI (brew install tree-sitter-cli).
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     lazy = false,
     build = function()
       -- Install parsers on first install / :Lazy build
-      require("nvim-treesitter").install({
-        "lua", "vim", "vimdoc", "javascript", "python",
-        "r", "markdown", "c", "html",
-      }):wait(300000)
+      require("nvim-treesitter").install(ts_parsers):wait(300000)
     end,
     config = function()
       -- v1: setup() only takes install_dir override; defaults are fine
@@ -18,12 +29,11 @@ return {
 
       -- Enable treesitter highlighting + indentation for supported filetypes
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = {
-          "lua", "vim", "vimdoc", "javascript", "python",
-          "r", "markdown", "c", "html",
-        },
+        pattern = ts_filetypes,
         callback = function()
-          pcall(vim.treesitter.start)
+          if pcall(vim.treesitter.start) then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
         end,
       })
     end,
@@ -32,6 +42,7 @@ return {
   -- textobjects: new standalone setup API (no longer via configs.setup)
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
     lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()

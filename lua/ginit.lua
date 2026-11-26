@@ -20,4 +20,9 @@ noremap <kMinus> :call AdjustFontSize(-1)<CR>
 inoremap <C-kPlus> <Esc>:call AdjustFontSize(1)<CR>a
 inoremap <C-kMinus> <Esc>:call AdjustFontSize(-1)<CR>a
 
+" Start maximized rather than at whatever size was last saved
+if exists('*GuiWindowMaximized')
+  call GuiWindowMaximized(1)
+endif
+
 ]]
