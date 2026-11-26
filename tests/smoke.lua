@@ -66,6 +66,38 @@ case("unit", "lsp-zero default keymaps (gd) apply in LSP buffers", function()
   assert_eq(gd.buffer, 1, "gd buffer-local LSP map")
 end)
 
+case("unit", "no builtin gr* maps make gr ambiguous", function()
+  open("sample.lua")
+  wait_for_client(0, "lua_ls")
+  for _, lhs in ipairs({ "grr", "grn", "gri", "gra", "grt", "grx" }) do
+    assert_eq(vim.fn.maparg(lhs, "n"), "", "nmap " .. lhs)
+  end
+end)
+
+case("unit", "cmp <C-d> scrolls docs down, <C-u> up", function()
+  local cmp = require("cmp")
+  local mapping = require("cmp.config").get().mapping
+  local orig_visible, orig_scroll = cmp.visible_docs, cmp.scroll_docs
+  local got = {}
+  cmp.visible_docs = function() return true end
+  cmp.scroll_docs = function(delta) table.insert(got, delta) return true end
+  local ok, err = pcall(function()
+    mapping["<C-D>"].i(function() end)
+    mapping["<C-U>"].i(function() end)
+  end)
+  cmp.visible_docs, cmp.scroll_docs = orig_visible, orig_scroll
+  assert_true(ok, tostring(err))
+  assert_true(got[1] and got[1] > 0, "<C-d> delta " .. vim.inspect(got[1]))
+  assert_true(got[2] and got[2] < 0, "<C-u> delta " .. vim.inspect(got[2]))
+end)
+
+case("unit", "lazy health has no errors", function()
+  vim.cmd("silent checkhealth lazy")
+  local text = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+  vim.cmd("bwipeout!")
+  assert_true(not text:find("ERROR"), "lazy health:\n" .. text)
+end)
+
 case("unit", "LSP keymaps are buffer-local, not global", function()
   vim.cmd("enew")
   local k = vim.fn.maparg("K", "n", false, true)
@@ -130,6 +162,20 @@ case("e2e", "opening a Python file does not leak maps or globals", function()
   vim.cmd("enew")
   assert_eq(vim.fn.maparg("gz", "n"), "", "global nmap gz")
   assert_eq(_G.setupKeyBindings, nil, "_G.setupKeyBindings")
+end)
+
+case("e2e", "counted j moves real lines; bare j moves screen lines", function()
+  vim.cmd("enew")
+  vim.wo.wrap = true
+  local long = string.rep("word ", 100)
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, { long, long, long, long })
+  vim.api.nvim_win_set_cursor(0, { 1, 0 })
+  vim.api.nvim_feedkeys("2j", "mx", false)
+  assert_eq(vim.api.nvim_win_get_cursor(0)[1], 3, "line after 2j")
+  vim.api.nvim_win_set_cursor(0, { 1, 0 })
+  vim.api.nvim_feedkeys("j", "mx", false)
+  assert_eq(vim.api.nvim_win_get_cursor(0)[1], 1, "line after bare j on wrapped line")
+  vim.cmd("bwipeout!")
 end)
 
 case("e2e", "Telescope opens without deprecation warnings", function()

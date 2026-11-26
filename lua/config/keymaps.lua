@@ -52,10 +52,9 @@ map("n", ",ru", ":vs#<cr><c-w>x<c-w>h")
 map("n", "<kMinus>", "<C-x>")
 map("n", "<kPlus>", "<C-a>")
 map("n", "Y", "y$")
-map("n", "j", "gj")
-map("n", "k", "gk")
-map("v", "j", "gj")
-map("v", "k", "gk")
+-- Screen-line motion only without a count, so relativenumber counts stay true
+map({ "n", "v" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
+map({ "n", "v" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 map("n", "<C-S>", ":update<CR>")
 map("v", "<C-s>", "<c-c>:update<CR>gv")
 map("n", "q:", "<Nop>")
@@ -65,6 +64,16 @@ map("n", "<leader>n", ":call RenameFile()<cr>")
 map("n", "<Leader>cd", ":cd %:h<CR>")
 map("n", "<LocalLeader>rc", ":s/,/,\\r/g<cr>:noh<cr>=ip")
 map("n", "<LocalLeader>r,", ":s/,/,\\r/g<cr>:noh<cr>=ip")
+
+-- Drop nvim 0.11+ default gr* LSP maps. They make the buffer-local `gr`
+-- (references, set on LspAttach) wait timeoutlen for disambiguation.
+-- Equivalents: <leader>r rename, gi, gt, gr, and lsp-zero's <F4> code action.
+for _, spec in ipairs({
+  { "n", "grr" }, { "n", "grn" }, { "n", "gri" }, { "n", "grt" }, { "n", "grx" },
+  { "n", "gra" }, { "x", "gra" },
+}) do
+  pcall(vim.keymap.del, spec[1], spec[2])
+end
 
 -- Open Finder (macOS only)
 if package.config:sub(1, 1) == "/" then
