@@ -74,6 +74,10 @@ vim.opt.showmode = false
 vim.opt.title = true
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cursorline = true
+-- Name the Cursor group so the TUI sets the terminal's cursor colour (OSC 12).
+-- Without it, terminal nvim (e.g. Claude Code's ctrl-g editor) keeps the
+-- terminal's dark cursor, which disappears on tokyonight's cursorline.
+vim.opt.guicursor = "n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor,t:block-blinkon500-blinkoff500-TermCursor"
 vim.opt.shiftwidth = 2
 vim.opt.smartindent = true
 vim.opt.tabstop = 2

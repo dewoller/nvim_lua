@@ -74,6 +74,24 @@ case("unit", "no builtin gr* maps make gr ambiguous", function()
   end
 end)
 
+-- In a terminal (Claude Code's ctrl-g editor), nvim only recolours the
+-- cursor when 'guicursor' names a highlight group; otherwise the terminal's
+-- own cursor colour is used and vanishes against tokyonight's cursorline.
+case("unit", "terminal cursor takes its colour from the Cursor group", function()
+  for _, mode in ipairs({ "n", "i" }) do
+    local entry
+    for part in vim.o.guicursor:gmatch("[^,]+") do
+      local modes = part:match("^([^:]+):")
+      if modes and vim.tbl_contains(vim.split(modes, "-"), mode) then entry = part break end
+    end
+    assert_true(entry and entry:find("Cursor"), mode .. "-mode guicursor lacks Cursor: " .. tostring(entry))
+  end
+  local hl = vim.api.nvim_get_hl(0, { name = "Cursor", link = false })
+  local cl = vim.api.nvim_get_hl(0, { name = "CursorLine", link = false })
+  assert_true(hl.bg ~= nil, "Cursor has no bg")
+  assert_true(hl.bg ~= cl.bg, "Cursor bg equals CursorLine bg")
+end)
+
 case("unit", "cmp <C-d> scrolls docs down, <C-u> up", function()
   local cmp = require("cmp")
   local mapping = require("cmp.config").get().mapping
