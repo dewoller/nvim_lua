@@ -1,15 +1,15 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
--- GUI font tweaks (nvim-qt only)
-autocmd("UIEnter", {
-  once = true,
-  callback = function()
-    if vim.fn.exists(":GuiFont") == 2 then
-      pcall(require, "ginit")
-    end
-  end,
-})
+-- GUI font tweaks (nvim-qt only) load from ginit.vim, which nvim-qt sources
+-- itself once its GUI commands exist.
+
+-- GUI launchers (Hammerspoon, Dock) start with cwd "/"; start in $HOME instead
+-- so Telescope and grep don't crawl the whole disk. Only with no file args,
+-- since relative args were given against "/".
+if vim.fn.getcwd() == "/" and vim.fn.argc() == 0 then
+  vim.cmd.cd(vim.fn.fnameescape(vim.env.HOME))
+end
 
 -- File-changed-on-disk notice
 autocmd("FileChangedShellPost", {

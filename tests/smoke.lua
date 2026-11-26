@@ -178,6 +178,18 @@ case("e2e", "counted j moves real lines; bare j moves screen lines", function()
   vim.cmd("bwipeout!")
 end)
 
+case("e2e", "ginit.vim (sourced by nvim-qt) loads the GUI helpers", function()
+  local ginit = vim.fn.stdpath("config") .. "/ginit.vim"
+  assert_eq(vim.fn.filereadable(ginit), 1, "ginit.vim readable")
+  -- Stand-in for nvim-qt's shim function; records the requested state.
+  vim.cmd("function! GuiWindowMaximized(enabled)\n let g:test_maximized = a:enabled\nendfunction")
+  package.loaded["ginit"] = nil
+  vim.cmd("source " .. ginit)
+  assert_eq(vim.fn.exists("*AdjustFontSize"), 1, "AdjustFontSize defined")
+  assert_eq(vim.g.test_maximized, 1, "GuiWindowMaximized called with")
+  vim.cmd("delfunction GuiWindowMaximized")
+end)
+
 case("e2e", "Telescope opens without deprecation warnings", function()
   open("sample.py")
   captured = {}

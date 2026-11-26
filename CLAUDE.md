@@ -21,7 +21,8 @@ Targets Neovim 0.12+ (`/opt/homebrew/bin/nvim`).
 - **lua/config/autocmds.lua** - Autocmds, `TrimWhitespace`, `RenameFile()`
 - **lua/plugins/*.lua** - Plugin specs: colorscheme, telescope, treesitter, lsp, completion, neogit, hop, mundo, comment, editing
 - **ftplugin/python.lua** - Python REPL keymaps (buffer-local)
-- **lua/ginit.lua** - nvim-qt font tweaks, loaded on UIEnter when `:GuiFont` exists
+- **ginit.vim** → **lua/ginit.lua** - nvim-qt only (nvim-qt sources `ginit.vim` itself): font-size keys, start maximized
+- Launched from a GUI (Hammerspoon hyper-n, Dock) with cwd `/` and no file args, nvim `cd`s to `$HOME` (`lua/config/autocmds.lua`)
 - **after/** - R indent and treesitter query overrides
 - **archive/** - Retired files kept for reference (Nvim-R ftplugin, snippets, radian scripts, luasnip config); nothing loads them
 - **docs/superpowers/** - Specs and plans for past config changes
